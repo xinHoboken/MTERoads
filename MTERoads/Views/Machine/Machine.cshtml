@@ -1,0 +1,188 @@
+﻿@model MTERoads.ViewModels.MachViewModel
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+@{
+    ViewBag.Title = "Machine";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    WebGrid grid = new WebGrid(source: Model.Machs, canPage: true, rowsPerPage: 5); // grid with sorting and paging
+}
+
+<div class="container">
+    @using (Html.BeginForm("AddMachine", "Machine", FormMethod.Post))
+    {
+        @*@Html.ValidationSummary("", new { @style = "color: red" })*@
+        <fieldset id="inputs">
+            <div class="well">
+                <div class="row">
+                    <div class="col-md-3 form-group">
+                        @Html.TextBoxFor(model => model.Mach_No, new { @class = "form-control", placeholder = "Machine Code" })
+                    </div>
+                    <div class="col-md-4 form-group">
+                        @Html.TextBoxFor(model => model.Mach_Desc, new { @class = "form-control", placeholder = "Machine Description" })
+                    </div>
+                    <div class="col-md-2 form-group">
+                        <button class="btn btn-primary" type="submit">Add New Machine</button>
+                    </div>
+                </div><!--First row end-->
+                <div class="row">
+                    <div class="col-md-3 form-group">
+                        @Html.TextBoxFor(model => model.Lease_Rate, new { @class = "form-control", placeholder = "Lease Rate" })
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <div class="dropdown">
+                            @Html.DropDownListFor(model => model.Owner_Num, (SelectList)ViewBag.DropDownResult,
+        "Select Owner", new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div><!--Second row end-->
+            </div><!--Well part end-->
+        </fieldset>
+    }
+    <!--form part end-->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-sea margin-bottom-40">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-edit"></i></h3>
+                </div>
+                @grid.GetHtml(
+                    htmlAttributes: new
+                    {
+                        @class = "table table-bordered table-striped table-condensed"
+                    },
+                    mode: WebGridPagerModes.All,
+                    columns:
+                    grid.Columns(
+                        grid.Column("Mach_No", "Machine Number"),
+                        grid.Column("Mach_Desc", "Machine Description"),
+                        grid.Column("Lease_Rate", "Lease Rate"),
+                        grid.Column("tblOwner.Owner_Name", "Owner Name"),
+                        grid.Column("Active", "Active", format: (item) => @Html.Raw("<input type='checkbox' " + ((item.Active == true) ? "checked" : "") + " disabled='true' />")),
+                        grid.Column("Action",
+                         format: @<text>
+                            <button class="btn btn-info btn-xs edit-user">Edit</button>
+                        </text>, style: "col3Width", canSort: false)
+                    )
+                )
+            </div>
+        </div>
+    </div><!--WebGrid end-->
+    <!--Model part-->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#aa7f55">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Edit</h4>
+                </div>
+                <div class="modal-body">
+                    @*@using (Html.BeginForm("Update", "Machine", FormMethod.Post, new { @class = "form-horizontal row" }))
+                    {*@
+                        @*<form action="#" class="form-horizontal row" method="post">*@
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-5 form-group">
+                                    <label class="col-sm-10 control-label">Number</label>
+                                </div>
+                                <div class="col-md-7 form-group">
+                                    <input id="txtMachID" name="Mach_No" class = "form-control" readonly/><br />                                    
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5 form-group">
+                                    <label class="col-sm-10 control-label">Description</label>
+                                </div>
+                                <div class="col-md-7 form-group">
+                                    <input id="txtMachDesc" name="Mach_Desc" class="form-control"/><br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5 form-group">
+                                    <label class="col-sm-10 control-label">Lease Rate</label>
+                                </div>
+                                <div class="col-md-7 form-group">
+                                    <input id="txtLeaseRate" name="Lease_Rate" class="form-control" /><br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5 form-group">
+                                    <label class="col-sm-10 control-label">Owner Name:</label>
+                                </div>
+                                <div class="col-md-7 form-group">
+                                    @Html.DropDownList("mResult", "Please select")
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5 form-group">
+                                    <label class="col-sm-10 control-label">Active</label>
+                                </div>
+                                <div class="col-md-1 form-group">
+                                    <input id="chkboxActive" name="chkbox" type="checkbox" class="form-control" />
+
+                                </div>
+                            </div>
+                        </div>
+                        @*</form>*@
+                        <div class="col-md-4 pull-right">
+                            <button id="saveChange" type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    @*}*@
+                    <div class="modal-footer"></div>
+                </div>
+            </div>
+        </div><!--Model end-->
+
+        <script>
+            $(document).ready(function () {
+                $("#saveChange").on('click', function () {                    
+                    var mach = {
+                        "Mach_No": $("#txtMachID").val(), "Mach_Desc": $("#txtMachDesc").val(), "Lease_Rate": $("#txtLeaseRate").val(),
+                        "Owner_Num": document.getElementById("mResult").value, "Active": $("#chkboxActive").is(':checked')
+                    };
+                    $.ajax({
+                        url: '/Machine/Update',
+                        data: mach,
+                        type: 'POST',
+                        success: function () {
+                            window.location = '/Machine/Index';
+
+                            $('#myModal').on('hidden.bs.modal', function () {
+                                location.reload();
+                            })
+                            //alert('Record updated Successfully!!');
+                        },
+                        error: function (result) {
+                            alert(result.statusText);
+                        }
+                    });
+                });
+
+                $(".edit-user").on('click', function () {
+                    var row = $(this).parents('tr:first');
+                    var tds = row.find('td');
+                    var MachID = tds.eq(0).text();
+                    var MachDesc = tds.eq(1).text();
+                    var LeaseRate = tds.eq(2).text();
+                    var OwnerName = tds.eq(3).text();
+                    var Active = tds.find("input:checkbox")[0].checked;
+
+                    $("#txtMachID").val(MachID);
+                    $("#txtMachDesc").val(MachDesc);
+                    $("#txtLeaseRate").val(LeaseRate);
+                    $('#mResult option').map(function () {
+                        if ($(this).text() == OwnerName) return this;
+                    }).attr('selected', 'selected');
+                    if (Active == true) {
+                        $("#chkboxActive").prop('checked', true);
+                    } else {
+                        $("#chkboxActive").prop('checked', false);
+                    }
+
+                    $('#myModal').modal('show');
+                });
+            });
+        </script>
+    </div>
+</div>

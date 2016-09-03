@@ -1,0 +1,85 @@
+﻿@model MTERoads.ViewModels.TranViewModel
+
+@{
+    ViewBag.Title = "LoadTransaction";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <form action="#">
+        <div class="well">
+            <div class="row">
+                <div class="col-md-2 form-group">
+                    <input id="txtdate" class="form-control" placeholder="MM/DD/YYYY" />
+                </div>
+                <div class="col-md-3 form-group">
+                    <div class="dropdown">
+                        @Html.DropDownListFor(model => model.Emp_no, new SelectList(Model.Emps, "Emp_no", "Emp_Name"),
+        "--Select Employee--", new { @id = "ddlempname", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="col-md-3 form-group">
+                    <div class="dropdown">
+                        @Html.DropDownListFor(model => model.BIA_No, new SelectList(Model.Roads, "BIA_No", "Road_Name"),
+        "--Select Road--", new { @id = "ddlroadname", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="col-md-4 form-group">
+                    <div class="dropdown">
+                        @Html.DropDownListFor(model => model.Activity_Code, new SelectList(Model.Acts, "Activity_Code", "Activity_Desc"),
+        "--Select Activity--", new { @id = "ddlacivitydesc", @class = "form-control" })
+                    </div>
+                </div>
+            </div><!--first row end-->
+            <div class="row">
+                <div class="col-md-5 form-group">
+                    <div class="dropdown">
+                        @Html.DropDownListFor(model => model.Mach_No, new SelectList(Model.Machs, "Mach_No", "Mach_Desc"),
+        "--Select Machine--", new { @id = "ddlmachdesc", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="col-md-2 form-group">
+                    @Html.TextBoxFor(model => model.Hours, new { @id = "txthour", @class = "form-control", placeholder = "Hour" })
+                </div>
+                <div class="col-md-2 form-group">
+                    @Html.TextBoxFor(model => model.Lease_Chg, new { @id = "txtleasecharge", @class = "form-control", placeholder = "Lease Charge" })
+                </div>
+                <div class="col-md-2 form-group">
+                    <button id="btnAdd" type="submit" class="btn btn-primary">Add New Transacton</button>
+                </div>
+            </div><!--second row end-->
+        </div><!--Well part end-->
+    </form>
+
+    <div>
+        @{ Html.RenderPartial("Read");}
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#btnAdd").on('click', function () {
+
+            var tvm = {
+                "Trans_Date": $('#txtdate').val(), "Emp_no": $('#ddlempname').val(), "BIA_No": $('#ddlroadname').val(),
+                "Activity_Code": $('#ddlacivitydesc').val(), "Mach_No": $('#ddlmachdesc').val(), "Hours": $('#txthour').val(),
+                "Lease_Chg": $('#txtleasecharge').val()
+            };
+            alert($('#txtleasecharge').val());
+            $.ajax({
+                url: '/Transaction/AddTransaction',
+                data: tvm,
+                type: 'POST',
+                //contentType: 'application/json; charset=utf-8',
+                //success: function () {
+                //    alert('Record added Successfully!!');
+                //},
+                //error: function () {
+                //    alert('Error!!');
+                //}
+            });
+        });
+    });
+
+</script>

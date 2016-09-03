@@ -1,0 +1,55 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Layout</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="@Url.Content("~/Content/bootstrap.min.css")" type="text/css" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/layout-customize.css")" type="text/css" />
+    <link href="~/Content/kendo/kendo.bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/kendo/kendo.common-bootstrap.min.css" rel="stylesheet" />
+    <script src="~/scripts/kendo/jquery.min.js"></script>
+    <script src="~/scripts/kendo/jquery-ui-1.12.0.min.js"></script>
+    <script src="~/scripts/kendo/jquery-ui-1.12.0.js"></script>
+    <script src="~/scripts/kendo/kendo.all.min.js"></script>
+    <script src="~/scripts/kendo/kendo.aspnetmvc.min.js"></script>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <img src="~/Content/images/logo.jpg" height="50" width="155"/>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>Activities</a></li>
+                        <li><a href="@Url.Action("Index", "Machine")"><span class="glyphicon glyphicon glyphicon-tasks" aria-hidden="true"></span>Machines</a></li>
+                        <li><a href="@Url.Action("Index", "Roads")"><span class="glyphicon glyphicon-road" aria-hidden="true"></span>Roads</a></li>
+                        <li><a href="@Url.Action("Index", "Transaction")"><span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span>Transactions</a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a></li>
+                        <li><a href="@Url.Action("Login", "Account")"><span class="glyphicon glyphicon-off" aria-hidden="true"></span> Log out</a></li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+    </header>
+    <div id="body">
+        
+            @RenderBody()
+        
+    </div>
+
+
+</body>
+</html>

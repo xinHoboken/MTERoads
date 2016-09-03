@@ -1,0 +1,32 @@
+﻿
+@(Html.Kendo().Grid<MTERoads.ViewModels.TranViewModel>()
+      .Name("grid")
+      .Columns(columns =>
+      {
+          columns.Bound(c => c.Emp_Name).Width(110).Title("Employee Name");
+          columns.Bound(c => c.Mach_Desc).Width(110).Title("Machine Description");
+          columns.Bound(c => c.Road_Name).Width(80).Title("Road Name");
+          columns.Bound(c => c.Activity_Desc).Width(100).Title("Activity");
+          columns.Bound(c => c.Hours).Width(50);
+          columns.Bound(c => c.Lease_Chg).Width(100).Title("Lease Charge");
+          columns.Command(cmd => { cmd.Edit(); }).Width(250);
+      })
+      .Editable(editable=>editable.Mode(GridEditMode.InLine))
+      .Sortable()
+      .Pageable()
+      .HtmlAttributes(new { style = "height:550;" })
+      .Scrollable()
+      .DataSource(dataSource => dataSource
+          .Ajax()
+          .Model(m => { m.Id(p => p.AutoNumber);
+              m.Field(p => p.Emp_Name).Editable(false);
+              m.Field(p => p.Mach_Desc).Editable(false);
+              m.Field(p => p.Road_Name).Editable(false);
+              m.Field(p => p.Activity_Desc).Editable(false);
+          })
+          .Read(read => read.Action("KendoRead", "Transaction"))
+          .Update(update => update.Action("EditingInline_Update", "Transaction"))
+          .PageSize(20)
+      )
+)
+

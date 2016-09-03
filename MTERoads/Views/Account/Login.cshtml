@@ -1,0 +1,34 @@
+﻿@model MTERoads.Models.ViewModel.UserLoginModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+    <link rel="stylesheet" href="@Url.Content("~/Content/Login.css")" type="text/css" />
+</head>
+<body>
+    <div>
+        @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @id = "login" }))
+        {
+            @Html.ValidationSummary( "",new { @style = "color: red" })
+            <h1>Log In</h1>
+            <fieldset id="inputs">
+                @Html.TextBoxFor(u=>u.LoginName, new { @id = "username", placeholder = Html.DisplayNameFor(u => u.LoginName) })
+                @Html.ValidationMessageFor(u => u.LoginName, "*")
+                @Html.PasswordFor(u => u.Password, new { @id= "password", placeholder = Html.DisplayNameFor(u => u.Password) })
+                @Html.ValidationMessageFor(u => u.Password, "*")
+            </fieldset>
+            <fieldset id="actions">
+                <input type="submit" id="submit" value="Log in">
+                <a href="">Forgot your password?</a><a href="">Register</a>
+            </fieldset>
+        }
+    </div>
+</body>
+</html>

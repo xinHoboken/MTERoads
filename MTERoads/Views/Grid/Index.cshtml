@@ -1,0 +1,47 @@
+﻿<script src="~/scripts/kendo/jquery-1.12.4.min.js"></script>
+<script src="~/scripts/kendo/jquery-ui-1.12.0.min.js"></script>
+<script src="~/scripts/kendo/kendo.all.min.js"></script>
+<script src="~/scripts/kendo/kendo.aspnetmvc.min.js"></script>
+
+@(Html.Kendo().Grid<MTERoads.Models.tblMach>()
+      .Name("grid")
+      .Columns(columns =>
+      {
+        columns.Bound(c => c.Mach_Desc);
+        columns.Bound(c => c.Lease_Rate);
+        columns.Bound(c => c.Active);
+      })
+      .Scrollable()
+      .DataSource(dataSource => dataSource
+          .Ajax()
+          .Read(read => read.Action("tblMaches_Read", "Grid"))
+      )
+)
+@*@(Html.Kendo().Grid<MTERoads.ViewModels.TranViewModel>()
+      .Name("grid")
+      .Columns(columns =>
+      {
+          columns.Bound(c => c.Emp_Name).Width(100).Title("Employee Name");
+          //columns.ForeignKey(c => c.Emp_No, new SelectList(ViewBag.Emp , "Emp_No","Emp_Name"));
+          columns.Bound(c => c.Mach_Desc).Width(120).Title("Machine Description");
+          columns.Bound(c => c.Road_Name).Width(100).Title("Road Name");
+          columns.Bound(c => c.Activity_Desc).Width(80).Title("Activity");
+          //columns.Bound(c => c.Trans_Date).Width(200);
+          columns.Bound(c => c.Hours).Width(50);
+          columns.Bound(c => c.Lease_Rate).Width(100).Title("Lease Charge");
+          columns.Command(cmd => { cmd.Edit(); }).Width(250);
+      })
+      //.Editable(editable=>editable.Mode(GridEditMode.InLine))
+      .Sortable()
+      .Pageable()
+      .HtmlAttributes(new { style = "height:550;" })
+      .Scrollable()
+      .DataSource(dataSource => dataSource
+          .Ajax()
+          .Events(events => events.Error("error_handler"))
+          .Model(m => { m.Id(p => p.AutoNumber); })
+          .Read(read => read.Action("KendoRead", "Transaction"))
+          .Update(update => update.Action("editRecord", "Transaction"))
+          .PageSize(20)
+      )
+)*@
